@@ -10,6 +10,20 @@ import Config
 config :teacher,
   ecto_repos: [Teacher.Repo]
 
+# Configures the Oban
+config :teacher, Oban,
+  repo: Teacher.Repo,
+  # O Pruner limpa os jobs que executaram com sucesso da tabela no PostgreSQL
+  # pra tabela não ficar muito grande...
+  #
+  # :limit — the maximum number of jobs to prune at one time.
+  # The default is 10,000 to prevent request timeouts.
+  # Applications that steadily generate more than 10k jobs a minute should increase this value.
+  plugins: [{Oban.Plugins.Pruner, limit: 11_000}],
+  # em queues você consegue definir uma nova fila, exemplo: fila_teste
+  # e definir a quantidade de jobs que vão executar de forma concorrente, exemplo: 10
+  queues: [default: 10, events: 50, media: 20, fila_teste: 10]
+
 # Configures the endpoint
 config :teacher, TeacherWeb.Endpoint,
   url: [host: "localhost"],
