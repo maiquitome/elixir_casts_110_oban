@@ -17,6 +17,7 @@ defmodule TeacherWeb.Router do
   scope "/", TeacherWeb do
     pipe_through :browser
 
+    post "/work", PageController, :create
     get "/", PageController, :index
   end
 
